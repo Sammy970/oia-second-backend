@@ -8,7 +8,7 @@ export default async (req, res) => {
     const entry = await db
       .db("Data")
       .collection("users")
-      .insertOne({ link: req.body.link });
+      .insertOne(req.body.link);
     res.statusCode = 201;
     return res.json({
       short_link: `${process.env.VERCEL_URL}/r/${entry.insertedId}`,
