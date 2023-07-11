@@ -21,7 +21,7 @@ export default async (req, res) => {
     if (dataToBeSent) {
       console.log("Found it");
       console.log(dataToBeSent);
-      dataToBeSent[req.body.email].codes.push(req.body.data2);
+      dataToBeSent[req.body.email].push(req.body.data2);
 
       const result = await db
         .db("Data")
