@@ -24,7 +24,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const fetchUserLinkData = await db.db("Data").collection("users");
     const linkData = await fetchUserLinkData.find({}).toArray();
 
-    
     const dataToBeSent = linkData.find((item) => item[req.body.data]);
     // console.log(dataToBeSent);
 
