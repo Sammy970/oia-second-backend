@@ -42,10 +42,24 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           .replaceOne({ _id: dataToBeSent["_id"] }, dataToBeSent);
 
         if (result.modifiedCount === 1) {
-          res.statusCode = 201;
-          return res.json({
-            status: "Successfully deleted",
+          const fetchLinkData = await db.db("Data").collection("getCodes");
+          const linkData = await fetchLinkData.deleteOne({
+            [req.body.code]: { $exists: true },
           });
+
+          if (linkData.deletedCount === 1) {
+            // console.log(linkData);
+            // console.log(linkData);
+            res.statusCode = 201;
+            return res.json({
+              status: "Successfully deleted",
+            });
+          } else {
+            res.statusCode = 404;
+            return res.json({
+              error: "Not Deleted the code in getCodes Collection",
+            });
+          }
         }
       } else {
         res.send("Not found");
