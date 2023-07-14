@@ -30,7 +30,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (dataToBeSent) {
       res.status(201).json(dataToBeSent[req.body.data]);
     } else {
-      res.send(false);
+      res.send([]);
     }
   } else {
     res.status(409).json({ error: "Send some Data when using POST" });
