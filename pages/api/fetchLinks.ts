@@ -10,9 +10,6 @@ export default async (req, res) => {
       [req.body.data]: { $exists: true },
     });
     if (linkData !== null) {
-      res.statusCode = 201;
-      res.json(linkData);
-
       linkData[req.body.data].clicks = linkData[req.body.data].clicks + 1;
 
       // console.log(linkData);
@@ -55,6 +52,13 @@ export default async (req, res) => {
           },
           documents[indexOfDoc]
         );
+
+        if (result.modifiedCount === 1) {
+          res.statusCode = 201;
+          return res.json(linkData);
+        } else {
+          return res.json({ stauts: "Error in updating clicks" });
+        }
       } else {
         console.log("Error in updating clicks");
       }
