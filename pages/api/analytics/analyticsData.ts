@@ -28,7 +28,14 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     if (linkData) {
       //   console.log(linkData[req.body.code].clicks);
-      res.status(201).send(linkData[req.body.code].clicks);
+
+      let objToBeSent = {
+        clicks: linkData[req.body.code].clicks,
+        fromWhere: linkData[req.body.code].fromWhere,
+        city: linkData[req.body.code].fromWhere.city,
+      };
+
+      res.status(201).send(objToBeSent);
     } else {
       res.send([]);
     }
