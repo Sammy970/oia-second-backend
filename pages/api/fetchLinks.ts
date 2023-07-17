@@ -11,6 +11,40 @@ export default async (req, res) => {
     });
     if (linkData !== null) {
       linkData[req.body.data].clicks = linkData[req.body.data].clicks + 1;
+      if (
+        linkData[req.body.data].fromWhere === undefined ||
+        linkData[req.body.data].fromWhere === null
+      ) {
+        console.log("I am in here");
+        console.log(req.body.city);
+        linkData[req.body.data].fromWhere = { city: [{ [req.body.city]: 1 }] };
+        console.log(linkData[req.body.data]);
+      } else {
+        console.log("I am in else");
+        const findIndex = linkData[req.body.data].fromWhere.city.findIndex(
+          (cityData) => {
+            return Object.keys(cityData).toString() === `${req.body.city}`;
+          }
+        );
+
+        // console.log(findIndex);
+
+        if (findIndex !== -1) {
+          const getKeyName = Object.keys(
+            linkData[req.body.data].fromWhere.city[findIndex]
+          ).toString();
+
+          const currentVal =
+            linkData[req.body.data].fromWhere.city[findIndex][req.body.city];
+          const newVal = currentVal + 1;
+          linkData[req.body.data].fromWhere.city[findIndex][req.body.city] =
+            newVal;
+
+          // console.log(linkData[req.body.data].fromWhere.city);
+        } else {
+          linkData[req.body.data].fromWhere.city.push({ [req.body.city]: 1 });
+        }
+      }
 
       // console.log(linkData);
 
