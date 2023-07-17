@@ -57,6 +57,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           dataToBeSent[req.body.email][index][req.body.code].clicks =
             findId[req.body.code].clicks;
 
+          dataToBeSent[req.body.email][index][req.body.code].fromWhere =
+            findId[req.body.code].fromWhere;
+
           const data = {
             _id: findId["_id"],
             [req.body.code]: dataToBeSent[req.body.email][index][req.body.code],
