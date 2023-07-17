@@ -37,6 +37,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
       dataToBeSent[req.body.email][index] = req.body.data;
 
+      // console.log(dataToBeSent);
+
       const result = await db
         .db("Data")
         .collection("users")
@@ -52,6 +54,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           });
 
         if (findId) {
+          dataToBeSent[req.body.email][index][req.body.code].clicks =
+            findId[req.body.code].clicks;
+
           const data = {
             _id: findId["_id"],
             [req.body.code]: dataToBeSent[req.body.email][index][req.body.code],
