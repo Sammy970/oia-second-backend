@@ -21,10 +21,12 @@ export default async (req, res) => {
         console.log(linkData[req.body.data]);
       } else if (
         linkData[req.body.data].fromWhere.city === undefined &&
-        linkData[req.body.data].fromWhere.state === undefined
+        linkData[req.body.data].fromWhere.state === undefined &&
+        linkData[req.body.data].fromWhere.country === undefined
       ) {
         linkData[req.body.data].fromWhere.city = [];
         linkData[req.body.data].fromWhere.state = [];
+        linkData[req.body.data].fromWhere.country = [];
       }
 
       console.log("I am in else");
@@ -40,8 +42,16 @@ export default async (req, res) => {
         }
       );
 
+      const findIndCountry = linkData[
+        req.body.data
+      ].fromWhere.country.findIndex((countryData) => {
+        return Object.keys(countryData).toString() === `${req.body.country}`;
+      });
+
       // console.log(findIndex);
       // console.log(req.body.city);
+
+      // City --------------------------------------------
 
       if (findIndCity !== -1) {
         const getKeyName = Object.keys(
@@ -53,11 +63,11 @@ export default async (req, res) => {
         const newVal = currentVal + 1;
         linkData[req.body.data].fromWhere.city[findIndCity][req.body.city] =
           newVal;
-
-        // console.log(linkData[req.body.data].fromWhere.city);
       } else {
         linkData[req.body.data].fromWhere.city.push({ [req.body.city]: 1 });
       }
+
+      // State --------------------------------------------
 
       if (findIndState !== -1) {
         const getKeyName = Object.keys(
@@ -69,10 +79,29 @@ export default async (req, res) => {
         const newVal = currentVal + 1;
         linkData[req.body.data].fromWhere.state[findIndState][req.body.state] =
           newVal;
-
-        // console.log(linkData[req.body.data].fromWhere.city);
       } else {
         linkData[req.body.data].fromWhere.state.push({ [req.body.state]: 1 });
+      }
+
+      // Country --------------------------------------------
+
+      if (findIndCountry !== -1) {
+        const getKeyName = Object.keys(
+          linkData[req.body.data].fromWhere.country[findIndCountry]
+        ).toString();
+
+        const currentVal =
+          linkData[req.body.data].fromWhere.country[findIndCountry][
+            req.body.country
+          ];
+        const newVal = currentVal + 1;
+        linkData[req.body.data].fromWhere.country[findIndCountry][
+          req.body.country
+        ] = newVal;
+      } else {
+        linkData[req.body.data].fromWhere.country.push({
+          [req.body.country]: 1,
+        });
       }
 
       // console.log(linkData);
