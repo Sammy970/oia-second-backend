@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import microCors from "micro-cors";
-import clientPromise from "../_connector";
+import clientPromise from "./_connector";
 
 const cors = microCors();
 
@@ -29,13 +29,21 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (linkData) {
       //   console.log(linkData[req.body.code].clicks);
 
+      let cityData;
+      if (linkData[req.body.code].fromWhere.city === undefined) {
+        cityData = null;
+      } else {
+        cityData = linkData[req.body.code].fromWhere.city;
+      }
       let objToBeSent = {
         clicks: linkData[req.body.code].clicks,
         fromWhere: linkData[req.body.code].fromWhere,
-        city: linkData[req.body.code].fromWhere.city,
+        city: cityData,
       };
 
-      res.status(201).send(objToBeSent);
+      console.log(objToBeSent);
+
+      res.status(201).json(objToBeSent);
     } else {
       res.send([]);
     }
