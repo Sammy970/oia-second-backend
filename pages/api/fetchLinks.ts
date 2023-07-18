@@ -16,36 +16,63 @@ export default async (req, res) => {
         linkData[req.body.data].fromWhere === null
       ) {
         console.log("I am in here");
-        console.log(req.body.city);
+        // console.log(req.body.city);
         linkData[req.body.data].fromWhere = { city: [{ [req.body.city]: 1 }] };
         console.log(linkData[req.body.data]);
-      } else if (linkData[req.body.data].fromWhere.city === undefined) {
+      } else if (
+        linkData[req.body.data].fromWhere.city === undefined &&
+        linkData[req.body.data].fromWhere.state === undefined
+      ) {
         linkData[req.body.data].fromWhere.city = [];
+        linkData[req.body.data].fromWhere.state = [];
       }
 
       console.log("I am in else");
-      const findInd = linkData[req.body.data].fromWhere.city.findIndex(
+      const findIndCity = linkData[req.body.data].fromWhere.city.findIndex(
         (cityData) => {
           return Object.keys(cityData).toString() === `${req.body.city}`;
         }
       );
 
-      // console.log(findIndex);
-      console.log(req.body.city);
+      const findIndState = linkData[req.body.data].fromWhere.state.findInd(
+        (stateData) => {
+          return Object.keys(stateData).toString() === `${req.body.state}`;
+        }
+      );
 
-      if (findInd !== -1) {
+      // console.log(findIndex);
+      // console.log(req.body.city);
+
+      if (findIndCity !== -1) {
         const getKeyName = Object.keys(
-          linkData[req.body.data].fromWhere.city[findInd]
+          linkData[req.body.data].fromWhere.city[findIndCity]
         ).toString();
 
         const currentVal =
-          linkData[req.body.data].fromWhere.city[findInd][req.body.city];
+          linkData[req.body.data].fromWhere.city[findIndCity][req.body.city];
         const newVal = currentVal + 1;
-        linkData[req.body.data].fromWhere.city[findInd][req.body.city] = newVal;
+        linkData[req.body.data].fromWhere.city[findIndCity][req.body.city] =
+          newVal;
 
         // console.log(linkData[req.body.data].fromWhere.city);
       } else {
         linkData[req.body.data].fromWhere.city.push({ [req.body.city]: 1 });
+      }
+
+      if (findIndState !== -1) {
+        const getKeyName = Object.keys(
+          linkData[req.body.data].fromWhere.state[findIndState]
+        ).toString();
+
+        const currentVal =
+          linkData[req.body.data].fromWhere.state[findIndState][req.body.state];
+        const newVal = currentVal + 1;
+        linkData[req.body.data].fromWhere.state[findIndState][req.body.state] =
+          newVal;
+
+        // console.log(linkData[req.body.data].fromWhere.city);
+      } else {
+        linkData[req.body.data].fromWhere.state.push({ [req.body.state]: 1 });
       }
 
       // console.log(linkData);

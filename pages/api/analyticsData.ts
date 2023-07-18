@@ -35,13 +35,22 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       } else {
         cityData = linkData[req.body.code].fromWhere.city;
       }
+
+      let stateData;
+      if (linkData[req.body.code].fromWhere.state === undefined) {
+        stateData = null;
+      } else {
+        stateData = linkData[req.body.code].fromWhere.state;
+      }
+
       let objToBeSent = {
         clicks: linkData[req.body.code].clicks,
         fromWhere: linkData[req.body.code].fromWhere,
         city: cityData,
+        state: stateData,
       };
 
-      console.log(objToBeSent);
+      // console.log(objToBeSent);
 
       res.status(201).json(objToBeSent);
     } else {
