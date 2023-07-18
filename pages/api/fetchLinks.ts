@@ -22,11 +22,13 @@ export default async (req, res) => {
       } else if (
         linkData[req.body.data].fromWhere.city === undefined &&
         linkData[req.body.data].fromWhere.state === undefined &&
-        linkData[req.body.data].fromWhere.country === undefined
+        linkData[req.body.data].fromWhere.country === undefined &&
+        linkData[req.body.data].fromWhere.osName === undefined
       ) {
         linkData[req.body.data].fromWhere.city = [];
         linkData[req.body.data].fromWhere.state = [];
         linkData[req.body.data].fromWhere.country = [];
+        linkData[req.body.data].fromWhere.osName = [];
       }
 
       console.log("I am in else");
@@ -47,6 +49,12 @@ export default async (req, res) => {
       ].fromWhere.country.findIndex((countryData) => {
         return Object.keys(countryData).toString() === `${req.body.country}`;
       });
+
+      const findIndOsName = linkData[req.body.data].fromWhere.osName.findIndex(
+        (osNameData) => {
+          return Object.keys(osNameData).toString() === `${req.body.osName}`;
+        }
+      );
 
       // console.log(findIndex);
       // console.log(req.body.city);
@@ -101,6 +109,27 @@ export default async (req, res) => {
       } else {
         linkData[req.body.data].fromWhere.country.push({
           [req.body.country]: 1,
+        });
+      }
+
+      // osName --------------------------------------------
+
+      if (findIndOsName !== -1) {
+        const getKeyName = Object.keys(
+          linkData[req.body.data].fromWhere.osName[findIndOsName]
+        ).toString();
+
+        const currentVal =
+          linkData[req.body.data].fromWhere.osName[findIndOsName][
+            req.body.osName
+          ];
+        const newVal = currentVal + 1;
+        linkData[req.body.data].fromWhere.osName[findIndOsName][
+          req.body.osName
+        ] = newVal;
+      } else {
+        linkData[req.body.data].fromWhere.osName.push({
+          [req.body.osName]: 1,
         });
       }
 
