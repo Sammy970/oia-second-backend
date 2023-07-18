@@ -34,7 +34,7 @@ export default async (req, res) => {
         }
       );
 
-      const findIndState = linkData[req.body.data].fromWhere.state.findInd(
+      const findIndState = linkData[req.body.data].fromWhere.state.findIndex(
         (stateData) => {
           return Object.keys(stateData).toString() === `${req.body.state}`;
         }
