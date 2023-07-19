@@ -11,7 +11,7 @@ export default async (req, res) => {
     });
 
     if (linkData !== null) {
-      console.log(req.body.osName);
+      // console.log(req.body.osName);
       if (req.body.osName !== null) {
         linkData[req.body.data].clicks = linkData[req.body.data].clicks + 1;
         if (
@@ -148,7 +148,12 @@ export default async (req, res) => {
         .collection("getCodes")
         .replaceOne({ _id: linkData["_id"] }, linkData);
 
+      // console.log(result);
+
       if (result.modifiedCount === 1) {
+        res.statusCode = 201;
+        return res.json(linkData);
+      } else if (result.modifiedCount === 0) {
         res.statusCode = 201;
         return res.json(linkData);
       } else {
