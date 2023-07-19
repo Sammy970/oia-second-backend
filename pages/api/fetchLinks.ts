@@ -12,7 +12,8 @@ export default async (req, res) => {
 
     if (linkData !== null) {
       console.log(req.body.osName);
-      if (req.body.osName !== undefined || req.body.osName !== null) {
+      console.log(typeof req.body.osName);
+      if (req.body.osName !== "undefined" || req.body.osName !== "null") {
         linkData[req.body.data].clicks = linkData[req.body.data].clicks + 1;
         if (
           linkData[req.body.data].fromWhere === undefined ||
