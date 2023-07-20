@@ -57,6 +57,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         osNameData = linkData[req.body.code].fromWhere.osName;
       }
 
+      let whenData;
+      if (linkData[req.body.code].when === undefined) {
+        whenData = null;
+      } else {
+        whenData = linkData[req.body.code].when;
+      }
+
       let objToBeSent = {
         clicks: linkData[req.body.code].clicks,
         fromWhere: linkData[req.body.code].fromWhere,
@@ -64,6 +71,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         state: stateData,
         country: countryData,
         osName: osNameData,
+        when: whenData,
       };
 
       // console.log(objToBeSent);

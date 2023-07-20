@@ -5,6 +5,7 @@ export default async (req, res) => {
   const db = await clientPromise;
 
   if (req.body !== "" && req.body !== undefined) {
+    // console.log(req.body);
     const fetchLinkData = await db.db("Data").collection("getCodes");
     const linkData = await fetchLinkData.findOne({
       [req.body.data]: { $exists: true },
@@ -28,12 +29,14 @@ export default async (req, res) => {
           linkData[req.body.data].fromWhere.city === undefined &&
           linkData[req.body.data].fromWhere.state === undefined &&
           linkData[req.body.data].fromWhere.country === undefined &&
-          linkData[req.body.data].fromWhere.osName === undefined
+          linkData[req.body.data].fromWhere.osName === undefined &&
+          linkData[req.body.data].when === undefined
         ) {
           linkData[req.body.data].fromWhere.city = [];
           linkData[req.body.data].fromWhere.state = [];
           linkData[req.body.data].fromWhere.country = [];
           linkData[req.body.data].fromWhere.osName = [];
+          linkData[req.body.data].when = {};
         }
 
         console.log("I am in else");
@@ -60,6 +63,71 @@ export default async (req, res) => {
         ].fromWhere.osName.findIndex((osNameData) => {
           return Object.keys(osNameData).toString() === `${req.body.osName}`;
         });
+
+        // Date time year month
+
+        const findYearInWhen = Object.keys(
+          linkData[req.body.data].when
+        ).includes(`y${req.body.year}`);
+
+        if (findYearInWhen) {
+          const dataFinder = linkData[req.body.data].when[`y${req.body.year}`];
+
+          const currentValofYear = dataFinder.clicks;
+          const newValOfYear = currentValofYear + 1;
+          dataFinder.clicks = newValOfYear;
+
+          const findMonthInWhen = Object.keys(dataFinder).includes(
+            `m${req.body.month}`
+          );
+
+          if (findMonthInWhen) {
+            const currentValOfMonth = dataFinder[`m${req.body.month}`].clicks;
+            const newValOfMonth = currentValOfMonth + 1;
+            dataFinder[`m${req.body.month}`].clicks = newValOfMonth;
+
+            const findDateInWhen = Object.keys(
+              dataFinder[`m${req.body.month}`]
+            ).includes(`d${req.body.date}`);
+
+            if (findDateInWhen) {
+              const currentDateInWhen =
+                dataFinder[`m${req.body.month}`][`d${req.body.date}`].clicks;
+              const newValOfDate = currentDateInWhen + 1;
+              dataFinder[`m${req.body.month}`][`d${req.body.date}`].clicks =
+                newValOfDate;
+            } else {
+              const month = `m${req.body.month}`;
+              const date = `d${req.body.date}`;
+              dataFinder[month][date] = {
+                clicks: 1,
+              };
+            }
+          } else {
+            const month = `m${req.body.month}`;
+            const date = `d${req.body.date}`;
+            dataFinder[month] = {
+              clicks: 1,
+              [date]: {
+                clicks: 1,
+              },
+            };
+          }
+        } else {
+          console.log("I am in else of year");
+          const year = `y${req.body.year}`;
+          const month = `m${req.body.month}`;
+          const date = `d${req.body.date}`;
+          linkData[req.body.data].when[year] = {
+            clicks: 1,
+            [month]: {
+              clicks: 1,
+              [date]: {
+                clicks: 1,
+              },
+            },
+          };
+        }
 
         // console.log(findIndex);
         // console.log(req.body.city);
